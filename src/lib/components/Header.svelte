@@ -98,7 +98,7 @@
 <style>
   .header {
     height: 64px;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border);
     position: sticky;
     top: 0;
@@ -123,10 +123,11 @@
   }
 
   .app-title {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 0;
     color: var(--color-text);
+    letter-spacing: -0.01em;
   }
 
   .icon-button {
@@ -144,20 +145,20 @@
   }
 
   .icon-button:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text);
   }
 
   .mobile-tabs {
     display: flex;
     gap: 0.5rem;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     padding: 4px;
     border-radius: 8px;
   }
 
   .tab {
-    padding: 0.5rem 1.25rem;
+    padding: 0.4rem 1.25rem;
     border: none;
     background: transparent;
     border-radius: 6px;
@@ -166,10 +167,11 @@
     color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
+    font-family: inherit;
   }
 
   .tab.active {
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
     color: var(--color-text);
     box-shadow: var(--shadow-sm);
   }
@@ -183,7 +185,7 @@
     top: calc(100% + 8px);
     right: 0;
     min-width: 200px;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     box-shadow: var(--shadow-lg);
@@ -192,11 +194,12 @@
   }
 
   .menu-header {
-    padding: 0.75rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 0.625rem 1rem;
+    font-size: 0.688rem;
+    font-weight: 500;
     text-transform: uppercase;
-    color: var(--color-text-secondary);
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
     background-color: var(--color-bg-secondary);
   }
 
@@ -210,10 +213,11 @@
     color: var(--color-text);
     cursor: pointer;
     transition: background-color 0.2s ease;
+    font-family: inherit;
   }
 
   .menu-item:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
   }
 
   @media (max-width: 768px) {

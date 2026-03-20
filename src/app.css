@@ -1,40 +1,39 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Custom color palette */
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
-  --color-secondary: #8b5cf6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
+  /* Accent */
+  --color-primary: #FF6B35;
+  --color-primary-dark: #e55a24;
+  --color-danger: #FF6347;
 
-  /* Neutral colors */
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f9fafb;
-  --color-bg-tertiary: #f3f4f6;
-  --color-text: #111827;
-  --color-text-secondary: #6b7280;
-  --color-border: #e5e7eb;
+  /* Dark theme surfaces */
+  --color-bg: #1A1A1C;
+  --color-bg-secondary: #222224;
+  --color-bg-tertiary: #2C2C2E;
+
+  /* Text */
+  --color-text: #FFFFFF;
+  --color-text-secondary: #8E8E93;
+  --color-text-muted: #6C6C70;
+
+  /* Border */
+  --color-border: #2C2C2E;
+
+  /* Category colors */
+  --color-cat-personal: #4DB8FF;
+  --color-cat-work: #D4E842;
+  --color-cat-shopping: #FF6347;
+  --color-cat-health: #4CD964;
+  --color-cat-other: #6C6C70;
 
   /* Sidebar */
   --sidebar-width: 320px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #111827;
-    --color-bg-secondary: #1f2937;
-    --color-bg-tertiary: #374151;
-    --color-text: #f9fafb;
-    --color-text-secondary: #9ca3af;
-    --color-border: #374151;
-  }
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 }
 
 * {
@@ -43,13 +42,16 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg);
   color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6, label, button, input, select, span {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #app {

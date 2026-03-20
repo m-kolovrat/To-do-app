@@ -188,7 +188,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,7 +199,8 @@
   .modal {
     width: 100%;
     max-width: 500px;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     box-shadow: var(--shadow-lg);
     overflow: hidden;
@@ -209,15 +210,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--color-border);
   }
 
   .modal-title {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 0;
     color: var(--color-text);
+    letter-spacing: -0.01em;
   }
 
   .close-btn {
@@ -235,7 +237,7 @@
   }
 
   .close-btn:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text);
   }
 
@@ -259,31 +261,34 @@
   }
 
   .form-label {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   .form-input,
   .form-select {
-    padding: 0.75rem;
-    background-color: var(--color-bg);
+    padding: 0.625rem 0.875rem;
+    background-color: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     font-size: 0.875rem;
     color: var(--color-text);
     transition: all 0.2s ease;
+    font-family: inherit;
   }
 
   .form-input:focus,
   .form-select:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3A3A3C;
+    box-shadow: none;
   }
 
   .form-input::placeholder {
-    color: var(--color-text-secondary);
+    color: var(--color-text-muted);
   }
 
   .form-select {
@@ -294,8 +299,8 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
-    background-color: var(--color-bg-secondary);
+    padding: 0.875rem 1rem;
+    background-color: var(--color-bg-tertiary);
     border-radius: 8px;
     border: 1px solid var(--color-border);
   }
@@ -364,21 +369,24 @@
   }
 
   .btn-secondary {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text);
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
   }
 
   .btn-secondary:hover {
-    background-color: var(--color-bg-tertiary);
+    background-color: #3A3A3C;
+    color: var(--color-text);
   }
 
   .btn-primary {
-    background-color: var(--color-primary);
-    color: white;
+    background-color: #FFFFFF;
+    color: #1A1A1C;
+    font-weight: 600;
   }
 
   .btn-primary:hover {
-    background-color: var(--color-primary-dark);
+    background-color: #E5E5E5;
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
   }

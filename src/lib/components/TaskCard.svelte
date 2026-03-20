@@ -6,17 +6,17 @@
   const dispatch = createEventDispatcher();
 
   const priorityColors = {
-    low: '#10b981',
-    medium: '#f59e0b',
-    high: '#ef4444'
+    low: '#4CD964',
+    medium: '#D4E842',
+    high: '#FF6347'
   };
 
   const categoryColors = {
-    Personal: '#3b82f6',
-    Work: '#8b5cf6',
-    Shopping: '#ec4899',
-    Health: '#10b981',
-    Other: '#6b7280'
+    Personal: '#4DB8FF',
+    Work: '#D4E842',
+    Shopping: '#FF6347',
+    Health: '#4CD964',
+    Other: '#6C6C70'
   };
 
   function formatDate(dateString) {
@@ -142,7 +142,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.25rem;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     border-radius: 12px;
     transition: all 0.2s ease;
@@ -150,6 +150,7 @@
   }
 
   .task-card:hover {
+    background-color: var(--color-bg-tertiary);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }
@@ -172,7 +173,7 @@
     height: 24px;
     border: 2px solid var(--color-border);
     border-radius: 6px;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-tertiary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -187,7 +188,7 @@
   .checkbox.checked {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
-    color: white;
+    color: #1A1A1C;
   }
 
   .task-info {
@@ -224,11 +225,12 @@
 
   .category-badge,
   .priority-badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.688rem;
+    font-weight: 600;
     text-transform: capitalize;
+    letter-spacing: 0.01em;
   }
 
   .task-meta {
@@ -273,12 +275,12 @@
   }
 
   .action-btn:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text);
   }
 
   .delete-btn:hover {
-    background-color: rgba(239, 68, 68, 0.1);
+    background-color: rgba(255, 99, 71, 0.15);
     color: var(--color-danger);
   }
 

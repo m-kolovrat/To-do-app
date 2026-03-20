@@ -206,7 +206,7 @@
   .sidebar {
     width: var(--sidebar-width);
     height: 100%;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-secondary);
     border-right: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
@@ -227,10 +227,12 @@
   }
 
   .sidebar-title {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 0.688rem;
+    font-weight: 500;
     margin: 0;
-    color: var(--color-text);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   .collapse-btn {
@@ -248,7 +250,7 @@
   }
 
   .collapse-btn:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     color: var(--color-text);
   }
 
@@ -267,18 +269,20 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    padding: 0.625rem 0.875rem;
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid transparent;
     border-radius: 8px;
-    color: var(--color-text);
-    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-size: 0.813rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-family: inherit;
   }
 
   .location-btn:hover {
-    background-color: var(--color-bg-tertiary);
+    background-color: #3A3A3C;
+    color: var(--color-text);
   }
 
   .location-btn span {
@@ -322,10 +326,11 @@
   }
 
   .forecast-title {
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.688rem;
+    font-weight: 500;
     text-transform: uppercase;
-    color: var(--color-text-secondary);
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
     margin: 0 0 1rem 0;
   }
 
@@ -338,8 +343,8 @@
   .forecast-item {
     display: flex;
     align-items: center;
-    padding: 0.75rem;
-    background-color: var(--color-bg-secondary);
+    padding: 0.625rem 0.75rem;
+    background-color: var(--color-bg-tertiary);
     border-radius: 8px;
   }
 
@@ -404,29 +409,34 @@
 
   .search-input {
     flex: 1;
-    padding: 0.75rem 1rem;
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border);
+    padding: 0.625rem 0.875rem;
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid transparent;
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.813rem;
     color: var(--color-text);
     transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .search-input::placeholder {
+    color: var(--color-text-muted);
   }
 
   .search-input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3A3A3C;
+    box-shadow: none;
   }
 
   .close-search-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border: none;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-tertiary);
     border-radius: 8px;
     color: var(--color-text-secondary);
     cursor: pointer;
@@ -434,7 +444,7 @@
   }
 
   .close-search-btn:hover {
-    background-color: var(--color-bg-tertiary);
+    background-color: #3A3A3C;
     color: var(--color-text);
   }
 
@@ -461,20 +471,21 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem;
-    background-color: var(--color-bg-secondary);
+    padding: 0.625rem 0.75rem;
+    background-color: var(--color-bg-tertiary);
     border: 1px solid transparent;
     border-radius: 8px;
-    font-size: 0.875rem;
-    color: var(--color-text);
+    font-size: 0.813rem;
+    color: var(--color-text-secondary);
     text-align: left;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-family: inherit;
   }
 
   .search-result-item:hover {
-    background-color: var(--color-bg-tertiary);
-    border-color: var(--color-primary);
+    background-color: #3A3A3C;
+    color: var(--color-text);
   }
 
   .loading-state,
