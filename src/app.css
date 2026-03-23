@@ -27,6 +27,13 @@
   --color-cat-health: #4CD964;
   --color-cat-other: #6C6C70;
 
+  /* Pastel card backgrounds (soft tints) */
+  --color-card-personal: #C8E6F5;
+  --color-card-work: #F5F7D4;
+  --color-card-shopping: #FFD4CC;
+  --color-card-health: #D4F5DB;
+  --color-card-other: #E0E0E2;
+
   /* Sidebar */
   --sidebar-width: 320px;
 

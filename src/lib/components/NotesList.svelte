@@ -1,16 +1,17 @@
 <script>
-  import { tasks, uiState, settings } from '../stores/appStore.js';
-  import TaskCard from './TaskCard.svelte';
-  import TaskModal from './TaskModal.svelte';
+  import { notes, uiState, settings } from '../stores/appStore.js';
+  import NoteCard from './NoteCard.svelte';
+  import NoteModal from './NoteModal.svelte';
 
-  let filterCategory = null;
+  // Filter notes based on category from uiState (controlled by CategorySidebar)
+  $: filterCategory = $uiState.filterCategory;
   let sortBy = 'created';
 
   const categories = ['Personal', 'Work', 'Shopping', 'Health', 'Other'];
   const priorities = ['low', 'medium', 'high'];
 
-  $: filteredTasks = $tasks
-    .filter(task => !filterCategory || task.category === filterCategory)
+  $: filteredNotes = $notes
+    .filter(note => !filterCategory || note.category === filterCategory)
     .sort((a, b) => {
       switch (sortBy) {
         case 'created':
@@ -27,67 +28,48 @@
       }
     });
 
-  $: incompleteTasks = filteredTasks.filter(task => !task.completed);
-  $: completedTasks = filteredTasks.filter(task => task.completed);
+  $: incompleteNotes = filteredNotes.filter(note => !note.completed);
+  $: completedNotes = filteredNotes.filter(note => note.completed);
 
-  function openTaskModal() {
-    uiState.update(state => ({ ...state, taskModalOpen: true, selectedTask: null }));
+  function openNoteModal() {
+    uiState.update(state => ({ ...state, noteModalOpen: true, selectedNote: null }));
   }
 
-  function closeTaskModal() {
-    uiState.update(state => ({ ...state, taskModalOpen: false, selectedTask: null }));
+  function closeNoteModal() {
+    uiState.update(state => ({ ...state, noteModalOpen: false, selectedNote: null }));
   }
 
-  function handleEditTask(event) {
-    uiState.update(state => ({ ...state, taskModalOpen: true, selectedTask: event.detail }));
+  function handleEditNote(event) {
+    uiState.update(state => ({ ...state, noteModalOpen: true, selectedNote: event.detail }));
   }
 
-  function handleDeleteTask(event) {
-    tasks.delete(event.detail.id);
+  function handleDeleteNote(event) {
+    notes.delete(event.detail.id);
   }
 
-  function handleToggleTask(event) {
-    tasks.toggle(event.detail.id);
+  function handleToggleNote(event) {
+    notes.toggle(event.detail.id);
   }
 </script>
 
-<div class="todo-container">
+<div class="notes-container">
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-left">
-      <h2 class="section-title">My Tasks</h2>
-      <span class="task-count">{incompleteTasks.length} active</span>
+      <h2 class="section-title">My Notes</h2>
+      <span class="note-count">{incompleteNotes.length} active</span>
     </div>
-    <button class="add-button" on:click={openTaskModal}>
+    <button class="add-button" on:click={openNoteModal}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
       </svg>
-      Add Task
+      Add Note
     </button>
   </div>
 
-  <!-- Filters and Sort -->
+  <!-- Sort (filters removed - now in CategorySidebar) -->
   <div class="controls">
-    <div class="filters">
-      <button
-        class="filter-chip"
-        class:active={filterCategory === null}
-        on:click={() => filterCategory = null}
-      >
-        All
-      </button>
-      {#each categories as category}
-        <button
-          class="filter-chip"
-          class:active={filterCategory === category}
-          on:click={() => filterCategory = category}
-        >
-          {category}
-        </button>
-      {/each}
-    </div>
-
     <div class="sort-select-wrapper">
       <label for="sort-select" class="sort-label">Sort by:</label>
       <select id="sort-select" class="sort-select" bind:value={sortBy}>
@@ -98,39 +80,39 @@
     </div>
   </div>
 
-  <!-- Task List -->
-  <div class="task-list">
-    {#if incompleteTasks.length === 0 && completedTasks.length === 0}
+  <!-- Notes List -->
+  <div class="notes-list">
+    {#if incompleteNotes.length === 0 && completedNotes.length === 0}
       <div class="empty-state">
         <div class="empty-icon">📝</div>
-        <h3>No tasks yet</h3>
-        <p>Add your first task to get started!</p>
+        <h3>No notes yet</h3>
+        <p>Add your first note to get started!</p>
       </div>
     {:else}
-      <!-- Incomplete Tasks -->
-      {#if incompleteTasks.length > 0}
-        <div class="task-section">
-          {#each incompleteTasks as task (task.id)}
-            <TaskCard
-              {task}
-              on:edit={handleEditTask}
-              on:delete={handleDeleteTask}
-              on:toggle={handleToggleTask}
+      <!-- Incomplete Notes -->
+      {#if incompleteNotes.length > 0}
+        <div class="notes-section">
+          {#each incompleteNotes as note (note.id)}
+            <NoteCard
+              note={note}
+              on:edit={handleEditNote}
+              on:delete={handleDeleteNote}
+              on:toggle={handleToggleNote}
             />
           {/each}
         </div>
       {/if}
 
-      <!-- Completed Tasks -->
-      {#if completedTasks.length > 0}
-        <div class="task-section completed-section">
-          <h3 class="section-subtitle">Completed ({completedTasks.length})</h3>
-          {#each completedTasks as task (task.id)}
-            <TaskCard
-              {task}
-              on:edit={handleEditTask}
-              on:delete={handleDeleteTask}
-              on:toggle={handleToggleTask}
+      <!-- Completed Notes -->
+      {#if completedNotes.length > 0}
+        <div class="notes-section completed-section">
+          <h3 class="section-subtitle">Completed ({completedNotes.length})</h3>
+          {#each completedNotes as note (note.id)}
+            <NoteCard
+              note={note}
+              on:edit={handleEditNote}
+              on:delete={handleDeleteNote}
+              on:toggle={handleToggleNote}
             />
           {/each}
         </div>
@@ -139,16 +121,16 @@
   </div>
 </div>
 
-<!-- Task Modal -->
-{#if $uiState.taskModalOpen}
-  <TaskModal
-    task={$uiState.selectedTask}
-    on:close={closeTaskModal}
+<!-- Note Modal -->
+{#if $uiState.noteModalOpen}
+  <NoteModal
+    note={$uiState.selectedNote}
+    on:close={closeNoteModal}
   />
 {/if}
 
 <style>
-  .todo-container {
+  .notes-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
@@ -175,7 +157,7 @@
     letter-spacing: -0.02em;
   }
 
-  .task-count {
+  .note-count {
     padding: 0.2rem 0.65rem;
     background-color: var(--color-bg-tertiary);
     border-radius: 999px;
@@ -207,41 +189,10 @@
 
   .controls {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 1.5rem;
     gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .filters {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .filter-chip {
-    padding: 0.4rem 0.875rem;
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    font-size: 0.813rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .filter-chip:hover {
-    background-color: var(--color-bg-tertiary);
-    color: var(--color-text);
-    border-color: #3A3A3C;
-  }
-
-  .filter-chip.active {
-    background-color: var(--color-bg-tertiary);
-    border-color: #3A3A3C;
-    color: var(--color-text);
   }
 
   .sort-select-wrapper {
@@ -278,16 +229,36 @@
     box-shadow: none;
   }
 
-  .task-list {
+  .notes-list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  .task-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+  .notes-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  /* Responsive grid columns */
+  @media (min-width: 1400px) {
+    .notes-section {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1399px) {
+    .notes-section {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .notes-section {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .completed-section {
@@ -329,7 +300,7 @@
   }
 
   @media (max-width: 768px) {
-    .todo-container {
+    .notes-container {
       padding: 1rem;
     }
 

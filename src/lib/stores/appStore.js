@@ -4,49 +4,50 @@ import { loadFromStorage, saveToStorage } from '../utils/storage.js';
 // Load initial data from localStorage
 const initialData = loadFromStorage();
 
-// Tasks store
-function createTasksStore() {
-  const { subscribe, set, update } = writable(initialData.tasks);
+// Notes store
+function createNotesStore() {
+  const { subscribe, set, update } = writable(initialData.notes);
 
   return {
     subscribe,
-    add: (task) => update(tasks => {
-      const newTask = {
+    add: (note) => update(notes => {
+      const newNote = {
         id: Date.now().toString(),
-        title: task.title,
-        category: task.category || 'Personal',
-        priority: task.priority || 'medium',
-        dueDate: task.dueDate || null,
-        recurring: task.recurring || null,
+        name: note.name,
+        content: note.content || '',
+        category: note.category || 'Personal',
+        priority: note.priority || 'medium',
+        dueDate: note.dueDate || null,
+        recurring: note.recurring || null,
         completed: false,
         createdAt: new Date().toISOString()
       };
-      const updatedTasks = [...tasks, newTask];
-      saveData({ tasks: updatedTasks });
-      return updatedTasks;
+      const updatedNotes = [...notes, newNote];
+      saveData({ notes: updatedNotes });
+      return updatedNotes;
     }),
-    update: (id, updates) => update(tasks => {
-      const updatedTasks = tasks.map(task =>
-        task.id === id ? { ...task, ...updates } : task
+    update: (id, updates) => update(notes => {
+      const updatedNotes = notes.map(note =>
+        note.id === id ? { ...note, ...updates } : note
       );
-      saveData({ tasks: updatedTasks });
-      return updatedTasks;
+      saveData({ notes: updatedNotes });
+      return updatedNotes;
     }),
-    delete: (id) => update(tasks => {
-      const updatedTasks = tasks.filter(task => task.id !== id);
-      saveData({ tasks: updatedTasks });
-      return updatedTasks;
+    delete: (id) => update(notes => {
+      const updatedNotes = notes.filter(note => note.id !== id);
+      saveData({ notes: updatedNotes });
+      return updatedNotes;
     }),
-    toggle: (id) => update(tasks => {
-      const updatedTasks = tasks.map(task =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+    toggle: (id) => update(notes => {
+      const updatedNotes = notes.map(note =>
+        note.id === id ? { ...note, completed: !note.completed } : note
       );
-      saveData({ tasks: updatedTasks });
-      return updatedTasks;
+      saveData({ notes: updatedNotes });
+      return updatedNotes;
     }),
     clear: () => {
       set([]);
-      saveData({ tasks: [] });
+      saveData({ notes: [] });
     }
   };
 }
@@ -59,11 +60,6 @@ function createSettingsStore() {
     subscribe,
     update: (newSettings) => update(settings => {
       const updatedSettings = { ...settings, ...newSettings };
-      saveData({ settings: updatedSettings });
-      return updatedSettings;
-    }),
-    setSidebarPosition: (position) => update(settings => {
-      const updatedSettings = { ...settings, sidebarPosition: position };
       saveData({ settings: updatedSettings });
       return updatedSettings;
     }),
@@ -82,7 +78,6 @@ function createSettingsStore() {
         location: null,
         defaultCategory: 'Personal',
         defaultSort: 'created',
-        sidebarPosition: 'right',
         sidebarCollapsed: false
       };
       set(defaultSettings);
@@ -99,24 +94,24 @@ function saveData(updates) {
 }
 
 // Export stores
-export const tasks = createTasksStore();
+export const notes = createNotesStore();
 export const settings = createSettingsStore();
 
 // Derived stores
-export const incompleteTasks = derived(
-  tasks,
-  $tasks => $tasks.filter(task => !task.completed)
+export const incompleteNotes = derived(
+  notes,
+  $notes => $notes.filter(note => !note.completed)
 );
 
-export const completedTasks = derived(
-  tasks,
-  $tasks => $tasks.filter(task => task.completed)
+export const completedNotes = derived(
+  notes,
+  $notes => $notes.filter(note => note.completed)
 );
 
 // UI state store (not persisted)
 export const uiState = writable({
-  taskModalOpen: false,
-  selectedTask: null,
+  noteModalOpen: false,
+  selectedNote: null,
   filterCategory: null,
   sortBy: 'created'
 });

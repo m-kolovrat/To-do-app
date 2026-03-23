@@ -2,7 +2,7 @@
  * LocalStorage utility functions for persisting app data
  */
 
-const STORAGE_KEY = 'todo-weather-app';
+const STORAGE_KEY = 'notes-app';
 
 /**
  * Get data from localStorage
@@ -33,12 +33,11 @@ export function saveToStorage(data) {
  */
 function getDefaultData() {
   return {
-    tasks: [],
+    notes: [],
     settings: {
       location: null,
       defaultCategory: 'Personal',
       defaultSort: 'created',
-      sidebarPosition: 'right',
       sidebarCollapsed: false
     }
   };

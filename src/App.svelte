@@ -1,11 +1,12 @@
 <script>
   import { settings } from './lib/stores/appStore.js';
   import Header from './lib/components/Header.svelte';
+  import CategorySidebar from './lib/components/CategorySidebar.svelte';
   import Sidebar from './lib/components/Sidebar.svelte';
-  import TodoList from './lib/components/TodoList.svelte';
+  import NotesList from './lib/components/NotesList.svelte';
 
   let isMobile = false;
-  let activeTab = 'todo'; // 'todo' or 'weather'
+  let activeTab = 'notes'; // 'notes' or 'weather'
 
   // Check if mobile
   function checkMobile() {
@@ -21,11 +22,6 @@
   function toggleSidebar() {
     settings.setSidebarCollapsed(!$settings.sidebarCollapsed);
   }
-
-  function switchSidebarPosition() {
-    const newPosition = $settings.sidebarPosition === 'left' ? 'right' : 'left';
-    settings.setSidebarPosition(newPosition);
-  }
 </script>
 
 <div class="app-container">
@@ -33,33 +29,30 @@
     {isMobile}
     {activeTab}
     on:toggleSidebar={toggleSidebar}
-    on:switchSidebarPosition={switchSidebarPosition}
     on:tabChange={(e) => activeTab = e.detail}
   />
 
   {#if isMobile}
     <!-- Mobile: Tab-based view -->
     <main class="mobile-content">
-      {#if activeTab === 'todo'}
-        <TodoList />
+      {#if activeTab === 'notes'}
+        <NotesList />
       {:else}
         <Sidebar />
       {/if}
     </main>
   {:else}
-    <!-- Desktop: Sidebar layout -->
+    <!-- Desktop: Category sidebar (left, collapsible) + Notes (center) + Weather (right, always visible) -->
     <div class="desktop-layout">
-      {#if $settings.sidebarPosition === 'left' && !$settings.sidebarCollapsed}
-        <Sidebar position="left" on:toggle={toggleSidebar} />
+      {#if !$settings.sidebarCollapsed}
+        <CategorySidebar />
       {/if}
 
-      <main class="main-content" class:full-width={$settings.sidebarCollapsed}>
-        <TodoList />
+      <main class="main-content">
+        <NotesList />
       </main>
 
-      {#if $settings.sidebarPosition === 'right' && !$settings.sidebarCollapsed}
-        <Sidebar position="right" on:toggle={toggleSidebar} />
-      {/if}
+      <Sidebar position="right" />
     </div>
   {/if}
 </div>
@@ -82,12 +75,7 @@
   .main-content {
     flex: 1;
     overflow-y: auto;
-    transition: all 0.3s ease;
     background-color: var(--color-bg-secondary);
-  }
-
-  .main-content.full-width {
-    max-width: 100%;
   }
 
   .mobile-content {

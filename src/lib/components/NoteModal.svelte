@@ -1,11 +1,11 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { tasks } from '../stores/appStore.js';
+  import { notes } from '../stores/appStore.js';
   import { weather } from '../stores/weatherStore.js';
   import { getWeatherForDate } from '../utils/weatherService.js';
   import { animate } from 'motion';
 
-  export let task = null;
+  export let note = null;
 
   const dispatch = createEventDispatcher();
 
@@ -19,11 +19,12 @@
   ];
 
   let formData = {
-    title: task?.title || '',
-    category: task?.category || 'Personal',
-    priority: task?.priority || 'medium',
-    dueDate: task?.dueDate || '',
-    recurring: task?.recurring || null
+    name: note?.name || '',
+    content: note?.content || '',
+    category: note?.category || 'Personal',
+    priority: note?.priority || 'medium',
+    dueDate: note?.dueDate || '',
+    recurring: note?.recurring || null
   };
 
   let modalElement;
@@ -39,17 +40,17 @@
   }
 
   function handleSubmit() {
-    if (!formData.title.trim()) {
-      alert('Please enter a task title');
+    if (!formData.name.trim()) {
+      alert('Please enter a note name');
       return;
     }
 
-    if (task) {
-      // Update existing task
-      tasks.update(task.id, formData);
+    if (note) {
+      // Update existing note
+      notes.update(note.id, formData);
     } else {
-      // Create new task
-      tasks.add(formData);
+      // Create new note
+      notes.add(formData);
     }
 
     dispatch('close');
@@ -77,7 +78,7 @@
 <div class="modal-backdrop" on:click={handleBackdropClick}>
   <div class="modal" bind:this={modalElement}>
     <div class="modal-header">
-      <h2 class="modal-title">{task ? 'Edit Task' : 'New Task'}</h2>
+      <h2 class="modal-title">{note ? 'Edit Note' : 'New Note'}</h2>
       <button class="close-btn" on:click={handleClose} aria-label="Close modal">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -87,24 +88,36 @@
     </div>
 
     <form class="modal-body" on:submit|preventDefault={handleSubmit}>
-      <!-- Title -->
+      <!-- Note Name -->
       <div class="form-group">
-        <label for="task-title" class="form-label">Task Title *</label>
+        <label for="note-name" class="form-label">Note Name *</label>
         <input
-          id="task-title"
+          id="note-name"
           type="text"
           class="form-input"
-          placeholder="Enter task title..."
-          bind:value={formData.title}
+          placeholder="Enter note name..."
+          bind:value={formData.name}
           autofocus
         />
+      </div>
+
+      <!-- Content -->
+      <div class="form-group">
+        <label for="note-content" class="form-label">Content</label>
+        <textarea
+          id="note-content"
+          class="form-textarea"
+          placeholder="Enter note content..."
+          bind:value={formData.content}
+          rows="5"
+        ></textarea>
       </div>
 
       <!-- Category & Priority -->
       <div class="form-row">
         <div class="form-group">
-          <label for="task-category" class="form-label">Category</label>
-          <select id="task-category" class="form-select" bind:value={formData.category}>
+          <label for="note-category" class="form-label">Category</label>
+          <select id="note-category" class="form-select" bind:value={formData.category}>
             {#each categories as category}
               <option value={category}>{category}</option>
             {/each}
@@ -112,8 +125,8 @@
         </div>
 
         <div class="form-group">
-          <label for="task-priority" class="form-label">Priority</label>
-          <select id="task-priority" class="form-select" bind:value={formData.priority}>
+          <label for="note-priority" class="form-label">Priority</label>
+          <select id="note-priority" class="form-select" bind:value={formData.priority}>
             {#each priorities as priority}
               <option value={priority}>{priority.charAt(0).toUpperCase() + priority.slice(1)}</option>
             {/each}
@@ -123,9 +136,9 @@
 
       <!-- Due Date -->
       <div class="form-group">
-        <label for="task-due-date" class="form-label">Due Date</label>
+        <label for="note-due-date" class="form-label">Due Date</label>
         <input
-          id="task-due-date"
+          id="note-due-date"
           type="date"
           class="form-input"
           bind:value={formData.dueDate}
@@ -134,8 +147,8 @@
 
       <!-- Recurring -->
       <div class="form-group">
-        <label for="task-recurring" class="form-label">Recurring</label>
-        <select id="task-recurring" class="form-select" bind:value={formData.recurring}>
+        <label for="note-recurring" class="form-label">Recurring</label>
+        <select id="note-recurring" class="form-select" bind:value={formData.recurring}>
           {#each recurringOptions as option}
             <option value={option.value}>{option.label}</option>
           {/each}
@@ -174,7 +187,7 @@
           Cancel
         </button>
         <button type="submit" class="btn btn-primary">
-          {task ? 'Update Task' : 'Create Task'}
+          {note ? 'Update Note' : 'Create Note'}
         </button>
       </div>
     </form>
@@ -269,7 +282,8 @@
   }
 
   .form-input,
-  .form-select {
+  .form-select,
+  .form-textarea {
     padding: 0.625rem 0.875rem;
     background-color: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
@@ -280,8 +294,14 @@
     font-family: inherit;
   }
 
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
   .form-input:focus,
-  .form-select:focus {
+  .form-select:focus,
+  .form-textarea:focus {
     outline: none;
     border-color: #3A3A3C;
     box-shadow: none;
