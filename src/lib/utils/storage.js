@@ -34,6 +34,12 @@ export function saveToStorage(data) {
 function getDefaultData() {
   return {
     notes: [],
+    categories: [
+      { id: '1', name: 'Personal', color: '#4DB8FF' },
+      { id: '2', name: 'Work', color: '#D4E842' },
+      { id: '3', name: 'Shopping', color: '#f3893e' },
+      { id: '4', name: 'Health', color: '#4CD964' },
+    ],
     settings: {
       location: null,
       defaultCategory: 'Personal',

@@ -1,32 +1,13 @@
 <script>
-  import { notes, uiState, settings } from '../stores/appStore.js';
+  import { notes, uiState } from '../stores/appStore.js';
   import NoteCard from './NoteCard.svelte';
   import NoteModal from './NoteModal.svelte';
 
-  // Filter notes based on category from uiState (controlled by CategorySidebar)
   $: filterCategory = $uiState.filterCategory;
-  let sortBy = 'created';
-
-  const categories = ['Personal', 'Work', 'Shopping', 'Health', 'Other'];
-  const priorities = ['low', 'medium', 'high'];
 
   $: filteredNotes = $notes
     .filter(note => !filterCategory || note.category === filterCategory)
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'created':
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        case 'dueDate':
-          if (!a.dueDate) return 1;
-          if (!b.dueDate) return -1;
-          return new Date(a.dueDate) - new Date(b.dueDate);
-        case 'priority':
-          const priorityOrder = { high: 3, medium: 2, low: 1 };
-          return priorityOrder[b.priority] - priorityOrder[a.priority];
-        default:
-          return 0;
-      }
-    });
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   $: incompleteNotes = filteredNotes.filter(note => !note.completed);
   $: completedNotes = filteredNotes.filter(note => note.completed);
@@ -57,27 +38,15 @@
   <div class="toolbar">
     <div class="toolbar-left">
       <h2 class="section-title">My Notes</h2>
-      <span class="note-count">{incompleteNotes.length} active</span>
+      <span class="note-count">{filteredNotes.length}</span>
     </div>
     <button class="add-button" on:click={openNoteModal}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <line x1="5" y1="12" x2="19" y2="12"></line>
       </svg>
-      Add Note
+      New Note
     </button>
-  </div>
-
-  <!-- Sort (filters removed - now in CategorySidebar) -->
-  <div class="controls">
-    <div class="sort-select-wrapper">
-      <label for="sort-select" class="sort-label">Sort by:</label>
-      <select id="sort-select" class="sort-select" bind:value={sortBy}>
-        <option value="created">Date Created</option>
-        <option value="dueDate">Due Date</option>
-        <option value="priority">Priority</option>
-      </select>
-    </div>
   </div>
 
   <!-- Notes List -->
@@ -89,7 +58,6 @@
         <p>Add your first note to get started!</p>
       </div>
     {:else}
-      <!-- Incomplete Notes -->
       {#if incompleteNotes.length > 0}
         <div class="notes-section">
           {#each incompleteNotes as note (note.id)}
@@ -103,7 +71,6 @@
         </div>
       {/if}
 
-      <!-- Completed Notes -->
       {#if completedNotes.length > 0}
         <div class="notes-section completed-section">
           <h3 class="section-subtitle">Completed ({completedNotes.length})</h3>
@@ -121,7 +88,6 @@
   </div>
 </div>
 
-<!-- Note Modal -->
 {#if $uiState.noteModalOpen}
   <NoteModal
     note={$uiState.selectedNote}
@@ -133,50 +99,55 @@
   .notes-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 32px;
   }
 
   .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 56px;
   }
 
   .toolbar-left {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 8px;
   }
 
   .section-title {
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-family: 'Geist', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
     margin: 0;
     color: var(--color-text);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.56px;
+    line-height: 30px;
   }
 
   .note-count {
-    padding: 0.2rem 0.65rem;
-    background-color: var(--color-bg-tertiary);
-    border-radius: 999px;
-    font-size: 0.813rem;
+    font-family: 'Geist', sans-serif;
+    font-size: 24px;
     font-weight: 500;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 42px;
+    letter-spacing: -0.56px;
   }
 
   .add-button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
+    gap: 4px;
+    height: 32px;
+    padding: 10px 12px 10px 8px;
     background-color: #FFFFFF;
-    color: #1A1A1C;
+    color: #000000;
     border: none;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    border-radius: 6px;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
     cursor: pointer;
     transition: all 0.2s ease;
   }
@@ -187,48 +158,6 @@
     box-shadow: var(--shadow-md);
   }
 
-  .controls {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
-  }
-
-  .sort-select-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .sort-label {
-    font-size: 0.813rem;
-    color: var(--color-text-muted);
-  }
-
-  .sort-select {
-    padding: 0.4rem 0.875rem;
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    font-size: 0.813rem;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-  }
-
-  .sort-select:hover {
-    border-color: #3A3A3C;
-    color: var(--color-text);
-  }
-
-  .sort-select:focus {
-    outline: none;
-    border-color: #3A3A3C;
-    box-shadow: none;
-  }
-
   .notes-list {
     display: flex;
     flex-direction: column;
@@ -236,29 +165,8 @@
   }
 
   .notes-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
-    align-items: start;
-  }
-
-  /* Responsive grid columns */
-  @media (min-width: 1400px) {
-    .notes-section {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) and (max-width: 1399px) {
-    .notes-section {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .notes-section {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    display: flex;
+    flex-direction: column;
   }
 
   .completed-section {
@@ -308,6 +216,7 @@
       flex-direction: column;
       align-items: stretch;
       gap: 1rem;
+      margin-bottom: 2rem;
     }
 
     .toolbar-left {
@@ -321,15 +230,6 @@
     .add-button {
       width: 100%;
       justify-content: center;
-    }
-
-    .controls {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .sort-select-wrapper {
-      justify-content: space-between;
     }
   }
 </style>

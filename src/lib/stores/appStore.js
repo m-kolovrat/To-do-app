@@ -93,9 +93,46 @@ function saveData(updates) {
   saveToStorage(newData);
 }
 
+// Categories store
+function createCategoriesStore() {
+  const { subscribe, set, update } = writable(initialData.categories || [
+    { id: '1', name: 'Personal', color: '#4DB8FF' },
+    { id: '2', name: 'Work', color: '#D4E842' },
+    { id: '3', name: 'Shopping', color: '#f3893e' },
+    { id: '4', name: 'Health', color: '#4CD964' },
+  ]);
+
+  return {
+    subscribe,
+    add: (category) => update(cats => {
+      const newCat = {
+        id: Date.now().toString(),
+        name: category.name,
+        color: category.color
+      };
+      const updated = [...cats, newCat];
+      saveData({ categories: updated });
+      return updated;
+    }),
+    update: (id, updates) => update(cats => {
+      const updated = cats.map(cat =>
+        cat.id === id ? { ...cat, ...updates } : cat
+      );
+      saveData({ categories: updated });
+      return updated;
+    }),
+    delete: (id) => update(cats => {
+      const updated = cats.filter(cat => cat.id !== id);
+      saveData({ categories: updated });
+      return updated;
+    })
+  };
+}
+
 // Export stores
 export const notes = createNotesStore();
 export const settings = createSettingsStore();
+export const categories = createCategoriesStore();
 
 // Derived stores
 export const incompleteNotes = derived(

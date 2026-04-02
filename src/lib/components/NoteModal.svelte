@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { notes } from '../stores/appStore.js';
+  import { notes, categories } from '../stores/appStore.js';
   import { weather } from '../stores/weatherStore.js';
   import { getWeatherForDate } from '../utils/weatherService.js';
   import { animate } from 'motion';
@@ -8,8 +8,6 @@
   export let note = null;
 
   const dispatch = createEventDispatcher();
-
-  const categories = ['Personal', 'Work', 'Shopping', 'Health', 'Other'];
   const priorities = ['low', 'medium', 'high'];
   const recurringOptions = [
     { value: null, label: 'None' },
@@ -118,8 +116,8 @@
         <div class="form-group">
           <label for="note-category" class="form-label">Category</label>
           <select id="note-category" class="form-select" bind:value={formData.category}>
-            {#each categories as category}
-              <option value={category}>{category}</option>
+            {#each $categories as category}
+              <option value={category.name}>{category.name}</option>
             {/each}
           </select>
         </div>

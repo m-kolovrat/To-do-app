@@ -1,6 +1,4 @@
 <script>
-  import { settings } from './lib/stores/appStore.js';
-  import Header from './lib/components/Header.svelte';
   import CategorySidebar from './lib/components/CategorySidebar.svelte';
   import Sidebar from './lib/components/Sidebar.svelte';
   import NotesList from './lib/components/NotesList.svelte';
@@ -8,32 +6,35 @@
   let isMobile = false;
   let activeTab = 'notes'; // 'notes' or 'weather'
 
-  // Check if mobile
   function checkMobile() {
     isMobile = window.innerWidth < 768;
   }
 
-  // Run on mount and window resize
   $: if (typeof window !== 'undefined') {
     checkMobile();
     window.addEventListener('resize', checkMobile);
   }
-
-  function toggleSidebar() {
-    settings.setSidebarCollapsed(!$settings.sidebarCollapsed);
-  }
 </script>
 
 <div class="app-container">
-  <Header
-    {isMobile}
-    {activeTab}
-    on:toggleSidebar={toggleSidebar}
-    on:tabChange={(e) => activeTab = e.detail}
-  />
-
   {#if isMobile}
     <!-- Mobile: Tab-based view -->
+    <div class="mobile-tabs">
+      <button
+        class="tab"
+        class:active={activeTab === 'notes'}
+        on:click={() => activeTab = 'notes'}
+      >
+        Notes
+      </button>
+      <button
+        class="tab"
+        class:active={activeTab === 'weather'}
+        on:click={() => activeTab = 'weather'}
+      >
+        Weather
+      </button>
+    </div>
     <main class="mobile-content">
       {#if activeTab === 'notes'}
         <NotesList />
@@ -42,11 +43,9 @@
       {/if}
     </main>
   {:else}
-    <!-- Desktop: Category sidebar (left, collapsible) + Notes (center) + Weather (right, always visible) -->
+    <!-- Desktop: Category sidebar (left) + Notes (center) + Weather (right) -->
     <div class="desktop-layout">
-      {#if !$settings.sidebarCollapsed}
-        <CategorySidebar />
-      {/if}
+      <CategorySidebar />
 
       <main class="main-content">
         <NotesList />
@@ -68,8 +67,7 @@
   .desktop-layout {
     display: flex;
     flex: 1;
-    overflow: hidden;
-    height: calc(100vh - 64px); /* Header height */
+    min-height: 100vh;
   }
 
   .main-content {
@@ -84,9 +82,30 @@
     background-color: var(--color-bg-secondary);
   }
 
-  @media (max-width: 768px) {
-    .desktop-layout {
-      height: calc(100vh - 56px); /* Smaller header on mobile */
-    }
+  .mobile-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background-color: var(--color-bg-secondary);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tab {
+    padding: 0.4rem 1.25rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .tab.active {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
   }
 </style>
